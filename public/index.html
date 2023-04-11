@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
+        <title>Gymster</title>
+    </head>
+    <body>
+        <div class="project">
+            <div class="sidebar">
+                <div id="logo">
+                    <img class="logo" src="./assets/logo.png" alt="logo">
+                    <div class="logo-title">Gymster</div>
+                </div>
+                <div class="sidebar-links">
+                    <a href="">Dashboard</a>
+                    <a href="">Arms</a>
+                    <a href="">Legs</a>
+                    <a href="">Sholders</a>
+                    <a href="">Back</a>
+                    <a href="">Chest</a>
+                    <a href="#" id="logout-btn">Log Out</a>
+                </div>
+            </div>
+
+            <div class="dashboard">
+                <div class="dashboard-header">
+                    <div class="dashboard-title">Dashboard</div>
+                    <div id="dashboard-date"></div>
+                </div>
+                <div class="message">
+                    <div class="message-text">
+                        <div class="message-title">Hello Bernardo</div>
+                        <div class="message-tip">Looking good</div>
+                    </div>
+                    <div class="message-img">
+                        <img src="./assets/work.png" alt="img">
+                    </div>
+                </div>
+                <div class="activity">
+                    <div class="activity-calendar">
+                        <div class="wrapper">
+                            <header>
+                                <p class="current-date"></p>
+                                <div class="icons">
+                                    <span id="prev"
+                                        class="material-symbols-rounded">-</span>
+                                    <span id="next"
+                                        class="material-symbols-rounded">+</span>
+                                </div>
+                            </header>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"></ul>
+                            </div>
+                        </div>
+                        <div class="activity-tracker">
+                            <div class="tracker-input">
+                              <div id="tracker-title">Select the date</div>
+                              <div class="tracker-input-box">
+                                <select id="exercise-input">
+                                    <option value="">Select an exercise</option>
+                                    <option value="chest">chest</option>
+                                    <option value="back">back</option>
+                                    <option value="legs">legs</option>
+                                    <option value="sholders">sholders</option>
+                                    <option value="arms">arms</option>
+                                  </select>
+                                </div>
+                                <button id="submit-btn" type="submit">Submit</button>
+                              </div>
+                            <div class="tracker-display">
+                                <div class="tracker-display-title">What you did?</div>
+                                <div id="tracker-display-content" class="tracker-display-content"></div>
+                                <button id="delete-btn" class="delete-btn hidden">Delete Entry</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="colors">
+                    <div class="red" draggable="true"></div>
+                    <div class="blue" draggable="true"></div>
+                    <div class="yellow" draggable="true"></div>
+                    <div class="green" draggable="true"></div>
+                    <div class="purple" draggable="true"></div>
+                </div>
+            </div>
+
+
+            <div class="profile">
+                <div class="profile-top">
+                    <div class="profile-header">
+                        <div class="">
+                            <img class="profile-avatar" src="./assets/avatar.svg"
+                                alt="avatar">
+                        </div>
+                        <div class="profile-name">Bernardo Semiao</div>
+                        <div class="profile-title">Noob</div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-height">1.78m</div>
+                        <div class="profile-weight">85kg</div>
+                        <div class="profile-age">31y</div>
+                    </div>
+                    <div class="profile-stats-attributes">
+                        <div class="profile-height">Height</div>
+                        <div class="profile-weight">Weight</div>
+                        <div class="profile-age">Age</div>
+                    </div>
+                </div> 
+                <div class="profile-goals">
+                    <div class="profile-name">Your monthly goals</div>
+                    <div class="goals">
+                        <div class="progress-stats">
+                            <div class="profile-gains">Gains</div>
+                            <div class="profile-gains">+5kg</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 70%;"></div>
+                          </div>
+                          <div class="progress-stats">
+                            <div class="profile-t">Monthly GYM visits</div>
+                            <div class="profile-trips"></div>
+                          </div>
+                        
+                        <div class="progress-bar visit">
+                            <div class="progress" style="width: 70%;"></div>
+                          </div>
+                          <div class="progress-stats">
+                            <div class="profile-favorite">Favourite muscle</div>
+                            <div class="profile-favorite">Legs</div>
+                          </div>  
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 70%;"></div>
+                          </div>
+                    </div> 
+                </div>
+            </div>
+
+        </div>
+    </body>
+    <script src="index.js"></script>
+</html>

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "crypt": "^0.0.2",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "google-auth-library": "^8.7.0",
+    "mongoose": "^7.0.3",
+    "nodemon": "^2.0.22"
+  }
+}
