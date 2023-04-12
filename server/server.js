@@ -10,8 +10,6 @@ const session = require('express-session');
 
 const connectionString = 'mongodb+srv://berna19911:917242335@gymster.rmw6fzr.mongodb.net/?retryWrites=true&w=majority';
 
-
-
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
@@ -158,6 +156,23 @@ app.get('/api/check-login', (req, res) => {
       res.status(500).json({ message: 'Error fetching user information.' });
     }
   });
+
+  app.put('/api/update-user-details', requireLogin, async (req, res) => {
+    const { height, weight, age } = req.body;
+  
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.session.userId,
+        { height, weight, age },
+        { new: true, runValidators: true, select: '-password' }
+      );
+  
+      res.status(200).json({ message: 'User details updated successfully.', user: updatedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating user details.' });
+    }
+  });
   
   app.get('/api/fetch-exercises', async (req, res) => {
     const month = parseInt(req.query.month);
@@ -225,8 +240,6 @@ app.get('/api/check-login', (req, res) => {
 //Set the folder where all the static files are located so they can be rendered
 
   
-
-
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

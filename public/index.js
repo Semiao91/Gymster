@@ -150,6 +150,7 @@ async function submitExercise(date, exercise) {
   } else {
     console.error('Error submitting exercise.');
   }
+  await renderCalendar();
 }
 
 function updateUI(exercise) {
@@ -289,6 +290,78 @@ async function checkLoginStatus() {
 }
 
 checkLoginStatus();
+
+  const editProfileButton = document.getElementById("edit-profile");
+  const closeModalButton = document.getElementById("close-modal");
+  const saveChangesButton = document.getElementById("save-changes");
+  const modal = document.getElementById("edit-modal");
+
+  // Open the modal
+  editProfileButton.onclick = () => {
+    modal.style.display = "block";
+  };
+
+  // Close the modal
+  closeModalButton.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  // Save changes and close the modal
+ // Save changes and close the modal
+saveChangesButton.onclick = async () => {
+  const height = document.getElementById("height").value;
+  const weight = document.getElementById("weight").value;
+  const age = document.getElementById("age").value;
+
+  if (height || weight || age) {
+    try {
+      const response = await fetch('/api/update-user-details', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ height, weight, age }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        document.querySelector(".profile-height").textContent = result.user.height + "m";
+        document.querySelector(".profile-weight").textContent = result.user.weight + "kg";
+        document.querySelector(".profile-age").textContent = result.user.age + "y";
+
+        modal.style.display = "none";
+      } else {
+        const error = await response.json();
+        console.error('Error updating user details:', error.message);
+      }
+    } catch (error) {
+      console.error('Error updating user details:', error);
+    }
+  }
+};
+
+async function fetchUserDetails() {
+  try {
+    const response = await fetch('/api/userinfo');
+    if (response.ok) {
+      const result = await response.json();
+
+      document.querySelector(".profile-height").textContent = result.user.height ? result.user.height + "m" : '';
+      document.querySelector(".profile-weight").textContent = result.user.weight ? result.user.weight + "kg" : '';
+      document.querySelector(".profile-age").textContent = result.user.age ? result.user.age + "y" : '';
+    } else {
+      const error = await response.json();
+      console.error('Error fetching user details:', error.message);
+    }
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchUserDetails();
+});
 
 /*
 const colors = document.querySelectorAll(".colors div");

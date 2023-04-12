@@ -108,16 +108,32 @@
                         <div class="profile-name" id="profile-name"></div>
                         <div class="profile-title">Noob</div>
                     </div>
+                    <button id="edit-profile" class="edit-button">&#9998; Edit</button>
                     <div class="profile-stats">
-                        <div class="profile-height">1.78m</div>
-                        <div class="profile-weight">85kg</div>
-                        <div class="profile-age">31y</div>
+                        <div class="profile-height" ></div>
+                        <div class="profile-weight" ></div>
+                        <div class="profile-age" ></div>
                     </div>
                     <div class="profile-stats-attributes">
                         <div class="profile-height">Height</div>
                         <div class="profile-weight">Weight</div>
                         <div class="profile-age">Age</div>
                     </div>
+                    <div id="edit-modal" class="modal">
+                        <div class="modal-content">
+                          <h2>Edit Profile</h2>
+                          <label for="height">Height (m):</label>
+                          <input type="text" id="height" name="height" />
+                          <label for="weight">Weight (kg):</label>
+                          <input type="text" id="weight" name="weight" />
+                          <label for="age">Age (y):</label>
+                          <input type="text" id="age" name="age" />
+                          <div class="modal-buttons">
+                            <button id="save-changes">Save</button>
+                            <button id="close-modal">Cancel</button>
+                          </div>
+                        </div>
+                    
                 </div> 
                 <div class="profile-goals">
                     <div class="profile-name">Your monthly goals</div>
@@ -139,11 +155,9 @@
                           </div>
                           <div class="progress-stats">
                             <div class="profile-favorite">Favourite muscle</div>
-                            <div class="profile-favorite">Legs</div>
+                            <div class="profile-favourite">Legs</div>
                           </div>  
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 70%;"></div>
-                          </div>
+                          
                     </div> 
                 </div>
             </div>
