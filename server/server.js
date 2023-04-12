@@ -73,24 +73,35 @@ app.post('/api/submit-exercise', requireLogin, async (req, res) => {
   });
 
   app.post('/api/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    console.log('Registration request received:', req.body);
+
+    const { firstname, lastname, email, password } = req.body;
 
     // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        return res.status(400).json({ message: 'A user with this email already exists.' });
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            console.log('User already exists:', email);
+            return res.status(400).json({ message: 'A user with this email already exists.' });
+        }
+    } catch (error) {
+        console.error('Error checking for existing user:', error);
+        return res.status(500).json({ message: 'Error checking for existing user.', error });
     }
 
     // Create a new user
-    const newUser = new User({ username, email, password });
+    const newUser = new User({ firstname, lastname, email, password });
 
     try {
         const savedUser = await newUser.save();
+        console.log('User registered successfully:', savedUser);
         res.status(200).json({ message: 'User registered successfully.', user: savedUser });
     } catch (error) {
+        console.error('Error registering user:', error);
         res.status(500).json({ message: 'Error registering user.', error });
     }
 });
+
 
 
 app.post('/api/login', async (req, res) => {
@@ -135,6 +146,16 @@ app.get('/api/check-login', (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error fetching exercise.' });
+    }
+  });
+
+  app.get('/api/userinfo', requireLogin, async (req, res) => {
+    try {
+      const user = await User.findById(req.session.userId).select('-password');
+      res.status(200).json({ user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching user information.' });
     }
   });
   
