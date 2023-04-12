@@ -24,8 +24,11 @@
     <div class="form-container" style="margin-top: 20px;">
         <h2>Register</h2>
         <form id="register-form" onsubmit="handleRegister(event)">
-            <label for="register-username">Username:</label>
-            <input type="text" id="register-username" name="username" required>
+            <label for="register-firstname">First Name:</label>
+            <input type="text" id="register-firstname" name="firstname" required>
+
+            <label for="register-lastname">Last Name:</label>
+            <input type="text" id="register-lastname" name="lastname" required>
 
             <label for="register-email">Email:</label>
             <input type="email" id="register-email" name="email" required>
@@ -36,6 +39,12 @@
             <button type="submit">Register</button>
         </form>
     </div>
+
+    <h3 class="disclaimer">
+        <p>
+            DISCLAIMER: Passwords are encrypted but please make sure to use a different password that is unrelated to your email
+        </p>        
+    </h3>
     <script src="login.js"></script>
 </body>
 </html>

@@ -191,6 +191,34 @@ async function fetchExercises(month, year) {
   }
 }
 
+async function fetchUserInfo() {
+  try {
+    const response = await fetch('/api/userinfo');
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log('User information:', data.user);
+      return data.user; // Return user data here
+    } else {
+      console.log('Error fetching user information:', response.status);
+    }
+  } catch (error) {
+    console.error('Error fetching user information:', error);
+  }
+}
+
+
+async function updateWelcomeMessage() {
+  const userInfo = await fetchUserInfo();
+  if (userInfo) {
+    const welcomeMessageElement = document.getElementById('welcome-message');
+    const profileName = document.getElementById('profile-name');
+    profileName.textContent = `${userInfo.firstname} ${userInfo.lastname}`
+    welcomeMessageElement.textContent = `Hello ${userInfo.firstname}`; // Use userInfo.firstname
+  }
+}
+
+updateWelcomeMessage();
+
 deleteBtn.addEventListener("click", async () => {
   const selectedDateElement = document.querySelector(".selected");
   const selectedDate = selectedDateElement ? parseInt(selectedDateElement.textContent) : null;
