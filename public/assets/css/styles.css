@@ -51,13 +51,28 @@ body {
   gap: 40px;
   font-size: 20px;
   margin-top: 50%;
-
+  width: 100%;
+  align-items: center;
 }
 
 .sidebar-links a {
   color: #fcfcfc;
   text-decoration: none;
-  
+  background-image: linear-gradient(to right,#f4f5f7 50%, #43c079 50%);
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  transition: background-position 0.5s, color 0.3s;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.sidebar-links a:hover {
+  background-position: 0% 0;
+  border-radius: 20px 0 0 20px;
+  color: #43c079;
 }
 
 .dashboard {

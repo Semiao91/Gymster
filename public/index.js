@@ -15,6 +15,7 @@ const dateTimeString = getCurrentDateTime();
 const datetimeDiv = document.getElementById("dashboard-date");
 const dateTitle = document.getElementById("tracker-title");
 const deleteBtn = document.getElementById("delete-btn");
+const lookingGood = document.getElementById("message-tip");
 
 datetimeDiv.textContent = dateTimeString;
 
@@ -47,6 +48,7 @@ let currMonth = date.getMonth();
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+/// rendar calendar
 const renderCalendar = async () => {
   const exercises = await fetchExercises(currMonth, currYear);
   const exerciseDates = exercises ? exercises.map((exercise) => new Date(exercise.date).getDate()) : [];
@@ -151,6 +153,7 @@ async function submitExercise(date, exercise) {
     console.error('Error submitting exercise.');
   }
   await renderCalendar();
+  await updateMostSubmittedMuscleGroup();
 }
 
 function updateUI(exercise) {
@@ -192,6 +195,21 @@ async function fetchExercises(month, year) {
   }
 }
 
+async function updateMostSubmittedMuscleGroup() {
+  try {
+    const response = await fetch('/api/most-submitted-muscle-group');
+    const data = await response.json();
+    const muscleGroup = data.muscleGroup;
+    console.log(muscleGroup);
+    const muscleGroupText = muscleGroup || 'N/A';
+
+    document.getElementById('profile-favourite').innerText = `${muscleGroupText}`;
+  } catch (error) {
+    console.error('Error fetching most submitted muscle group:', error);
+  }
+}
+
+
 async function fetchUserInfo() {
   try {
     const response = await fetch('/api/userinfo');
@@ -219,6 +237,7 @@ async function updateWelcomeMessage() {
 }
 
 updateWelcomeMessage();
+updateMostSubmittedMuscleGroup();
 
 deleteBtn.addEventListener("click", async () => {
   const selectedDateElement = document.querySelector(".selected");
@@ -228,6 +247,7 @@ deleteBtn.addEventListener("click", async () => {
     const selectedDateString = new Date(currYear, currMonth, selectedDate).toISOString();
     await deleteExercise(selectedDateString);
     await renderCalendar();
+    await updateMostSubmittedMuscleGroup();
     trackerDisplayContent.textContent = '';
   }
 });

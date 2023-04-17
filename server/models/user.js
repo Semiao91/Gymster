@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     height: { type: Number},
     age: {type: Number},
-    weight: {type: Number}
+    weight: {type: Number},
 });
 
 userSchema.pre('save', async function (next) {

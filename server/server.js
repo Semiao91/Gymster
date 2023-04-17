@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const Exercise = require('./models/exercise');
 const User = require('./models/user');
+const Goal = require('./models/goals');
 const session = require('express-session');
 
 const connectionString = 'mongodb+srv://berna19911:917242335@gymster.rmw6fzr.mongodb.net/?retryWrites=true&w=majority';
@@ -36,7 +37,7 @@ app.get('/login', (req, res) => {
 });
 
 const requireLogin = (req, res, next) => {
-  
+  console.log("Checking login:", req.session); // Add this line
   if (!req.session.userId) {
     return res.status(401).json({ message: 'You must be logged in to access this resource.' });
   }
@@ -158,12 +159,12 @@ app.get('/api/check-login', (req, res) => {
   });
 
   app.put('/api/update-user-details', requireLogin, async (req, res) => {
-    const { height, weight, age } = req.body;
+    const { height, weight, age} = req.body;
   
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.session.userId,
-        { height, weight, age },
+        { height, weight, age},
         { new: true, runValidators: true, select: '-password' }
       );
   
@@ -173,6 +174,33 @@ app.get('/api/check-login', (req, res) => {
       res.status(500).json({ message: 'Error updating user details.' });
     }
   });
+
+  app.get('/api/most-submitted-muscle-group', requireLogin, async (req, res) => {
+    const userId = req.session.userId;
+    console.log("User ID:", userId); // Add this li
+  
+    try {
+      const mostSubmittedMuscleGroup = await getMostSubmittedMuscleGroup(userId);
+      res.status(200).json({ muscleGroup: mostSubmittedMuscleGroup });
+    } catch (error) {
+      console.error("Error in /api/most-submitted-muscle-group:", error); // Add this line
+      res.status(500).json({ message: 'Error fetching most submitted muscle group.', error });
+    }
+  });
+
+  async function getMostSubmittedMuscleGroup(userId) {
+    const muscleGroupCounts = await Exercise.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $group: { _id: '$type', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+  
+    if (muscleGroupCounts.length > 0) {
+      return muscleGroupCounts[0]._id;
+    }
+  
+    return null;
+  }
   
   app.get('/api/fetch-exercises', async (req, res) => {
     const month = parseInt(req.query.month);
