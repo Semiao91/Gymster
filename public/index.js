@@ -16,7 +16,6 @@ const datetimeDiv = document.getElementById("dashboard-date");
 const dateTitle = document.getElementById("tracker-title");
 const deleteBtn = document.getElementById("delete-btn");
 const lookingGood = document.getElementById("message-tip");
-
 datetimeDiv.textContent = dateTimeString;
 
 /////Handles select inputs for 5 exercises
@@ -35,6 +34,7 @@ submitBtn.addEventListener("click", () => {
     const selectedDateString = new Date(currYear, currMonth, selectedDate).toISOString();
     submitExercise(selectedDateString, selectedExercise);
     trackerDisplayContent.textContent = `You did ${selectedExercise} on this day`;
+    
   }
 });
 
@@ -129,9 +129,11 @@ async function selectDate(element) {
   if (exercise) {
     trackerDisplayContent.textContent = `You did ${exercise.type} on this day`;
     deleteBtn.classList.remove('hidden'); // Show delete button
+    submitBtn.classList.add('hidden'); // Hide submit button
   } else {
     trackerDisplayContent.textContent = '';
     deleteBtn.classList.add('hidden'); // Hide delete button
+    submitBtn.classList.remove('hidden'); // Show submit button
   }
 }
 
@@ -147,13 +149,14 @@ async function submitExercise(date, exercise) {
 
   if (response.ok) {
     const data = await response.json();
-    console.log(data.message);
+    showAlert('Exercise added successfully');
     updateUI(data.exercise);
   } else {
-    console.error('Error submitting exercise.');
+    showAlert('Error submiting exercise');
   }
   await renderCalendar();
   await updateMostSubmittedMuscleGroup();
+  
 }
 
 function updateUI(exercise) {
@@ -168,6 +171,7 @@ function updateUI(exercise) {
   } else {
     trackerDisplayContent.textContent = '';
     deleteBtn.classList.add('hidden');
+    
   }
 }
 
@@ -249,6 +253,7 @@ deleteBtn.addEventListener("click", async () => {
     await renderCalendar();
     await updateMostSubmittedMuscleGroup();
     trackerDisplayContent.textContent = '';
+    deleteBtn.classList.add('hidden'); // Hide delete button
   }
 });
 
@@ -264,6 +269,7 @@ async function deleteExercise(date) {
   if (response.ok) {
     const data = await response.json();
     console.log(data.message);
+    showAlert('Exercise deleted successfully');
   } else {
     console.error('Error deleting exercise.');
   }
@@ -332,6 +338,7 @@ saveChangesButton.onclick = async () => {
   const height = document.getElementById("height").value;
   const weight = document.getElementById("weight").value;
   const age = document.getElementById("age").value;
+  const oldWeight = parseFloat(document.querySelector(".profile-weight").textContent);
 
   if (height || weight || age) {
     try {
@@ -350,7 +357,15 @@ saveChangesButton.onclick = async () => {
         document.querySelector(".profile-weight").textContent = result.user.weight + "kg";
         document.querySelector(".profile-age").textContent = result.user.age + "y";
 
+        const newWeight = parseFloat(result.user.weight);
+        const weightDifference = newWeight - oldWeight;
+        renderWeightDifference(weightDifference);
+
+        await saveWeightDifferenceGoal(weightDifference);
+
         modal.style.display = "none";
+        showAlert("Profile updated successfully")
+        updateProfileTitle();
       } else {
         const error = await response.json();
         console.error('Error updating user details:', error.message);
@@ -360,6 +375,37 @@ saveChangesButton.onclick = async () => {
     }
   }
 };
+
+async function saveWeightDifferenceGoal(weightDifference) {
+  try {
+    const response = await fetch('/api/save-goal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ weightDifference }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Error saving goal:', error.message);
+    }
+  } catch (error) {
+    console.error('Error saving goal:', error);
+  }
+}
+
+function renderWeightDifference(weightDifference) {
+  // Create an element to display the weight difference
+  const weightDifferenceElement = document.getElementById('profile-gains');
+
+  // Format the weight difference text
+  const weightDifferenceText = weightDifference > 0 ? `+${weightDifference}kg` : `${weightDifference}kg`;
+
+  // Set the content of the weight difference element
+  weightDifferenceElement.textContent = `${weightDifferenceText}`;
+  
+}
 
 async function fetchUserDetails() {
   try {
@@ -378,6 +424,58 @@ async function fetchUserDetails() {
     console.error('Error fetching user details:', error);
   }
 }
+
+async function getRecommendedProteinIntake() {
+  try {
+    const response = await fetch('/api/get-user-weight');
+    const data = await response.json();
+    const weight = data.weight;
+    const proteinIntake = weight * 0.8 * 2.2;
+
+    return proteinIntake;
+  } catch (error) {
+    console.error("Error fetching user's weight:", error);
+  }
+}
+async function loadLatestGoal() {
+  try {
+    const response = await fetch('/api/get-latest-goal');
+    if (response.ok) {
+      const goal = await response.json();
+      if (goal) {
+        renderWeightDifference(goal.weightDifference);
+      }
+    } else {
+      const error = await response.json();
+      console.error('Error retrieving latest goal:', error.message);
+    }
+  } catch (error) {
+    console.error('Error retrieving latest goal:', error);
+  }
+}
+
+loadLatestGoal();
+
+
+function showAlert(message) {
+  const alert = document.getElementById('alert');
+  const alertMessage = document.getElementById('alert-message');
+
+  alertMessage.textContent = message;
+  alert.classList.add('show');
+
+  setTimeout(() => {
+    alert.classList.remove('show');
+  }, 3000);
+}
+
+async function updateProfileTitle() {
+  const proteinIntake = await getRecommendedProteinIntake();
+  const profileTitle = document.querySelector('.profile-title');
+  profileTitle.textContent = `Daily protein intake: ${proteinIntake.toFixed(1)}g`;
+}
+
+updateProfileTitle();
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchUserDetails();

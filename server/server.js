@@ -244,6 +244,35 @@ app.get('/api/check-login', (req, res) => {
     }
   });
 
+  app.get('/api/get-user-weight', requireLogin, async (req, res) => {
+    const user = await User.findById(req.session.userId);
+    res.json({ weight: user.weight });
+  });
+
+  app.get('/api/get-latest-goal', requireLogin, async (req, res) => {
+    try {
+      const goal = await Goal.findOne({ userId: req.session.userId }).sort({ createdAt: -1 });
+      res.json(goal);
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving latest goal', error });
+    }
+  });
+
+  app.post('/api/save-goal', requireLogin, async (req, res) => {
+    try {
+      const { weightDifference } = req.body;
+      const goal = new Goal({
+        userId: req.session.userId,
+        weightDifference,
+      });
+  
+      await goal.save();
+      res.json({ message: 'Goal saved successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error saving goal', error });
+    }
+  });
+
   app.get('/logout', (req, res) => {
     console.log('Before session destroy:', req.session);
 

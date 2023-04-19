@@ -9,6 +9,9 @@
     </head>
     <body>
         <div class="project">
+            <div id="alert" class="alert">
+                <span id="alert-message"></span>
+              </div>
             <div class="sidebar">
                 <div id="logo">
                     <img class="logo" src="./assets/logo.png" alt="logo">
@@ -77,7 +80,7 @@
                                     <option value="arms">arms</option>
                                   </select>
                                 </div>
-                                <button id="submit-btn" type="submit">Submit</button>
+                                <button id="submit-btn" class="hidden" type="submit">Submit</button>
                               </div>
                             <div class="tracker-display">
                                 <div class="tracker-display-title">What you did?</div>
@@ -107,7 +110,10 @@
                         <div class="profile-name" id="profile-name"></div>
                         <div class="profile-title">Noob</div>
                     </div>
-                    <button id="edit-profile" class="edit-button">&#9998; Edit</button>
+                    <div class="edit">
+                        <button id="edit-profile" class="edit-button">&#9998; Edit</button>
+
+                    </div>
                     <div class="profile-stats">
                         <div class="profile-height" ></div>
                         <div class="profile-weight" ></div>
@@ -138,7 +144,7 @@
                     <div class="profile-name">Your monthly goals</div>
                     <div class="goals">
                         <div class="progress-stats">
-                            <div class="profile-gains">Gains</div>
+                            <div class="profile-gains" id="weight-difference">Gains</div>
                             <div class="profile-gains" id="profile-gains">0kg</div>
                         </div>
                         <div class="progress-bar">
