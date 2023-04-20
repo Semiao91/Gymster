@@ -1,3 +1,5 @@
+const pather = require('path');
+require('dotenv').config({ path: pather.resolve(__dirname, '.env') });
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,7 +12,7 @@ const Goal = require('./models/goals');
 const List = require('./models/list');
 const session = require('express-session');
 
-const connectionString = 'mongodb+srv://berna19911:917242335@gymster.rmw6fzr.mongodb.net/?retryWrites=true&w=majority';
+const connectionString = process.env.MONGODB_URI;
 
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -26,7 +28,7 @@ app.use(bodyParser.json());
 
 app.use(
   session({
-    secret: 'Maxigrula9194', // Replace this with your own secret key // implement EV file
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 24 hours
