@@ -17,7 +17,6 @@ const dateTitle = document.getElementById("tracker-title");
 const deleteBtn = document.getElementById("delete-btn");
 const lookingGood = document.getElementById("message-tip");
 datetimeDiv.textContent = dateTimeString;
-
 /////Handles select inputs for 5 exercises
 
 const exerciseInput = document.getElementById("exercise-input");
@@ -404,7 +403,25 @@ function renderWeightDifference(weightDifference) {
 
   // Set the content of the weight difference element
   weightDifferenceElement.textContent = `${weightDifferenceText}`;
-  
+  updateProgressBar(weightDifference);
+}
+
+function updateProgressBar(weightDifference) {
+  // Calculate progress percentage based on weight difference
+  // You can adjust the calculation based on your desired range
+  const progressPercentage = Math.abs(weightDifference) * 10;
+
+  // Update the progress bar width and color based on weight difference
+  const progressBar = document.querySelector('.progress-gains');
+  progressBar.style.width = `${progressPercentage}%`;
+
+  if (weightDifference < 0) {
+    progressBar.classList.remove('progress-gains');
+    progressBar.classList.add('progress-loss');
+  } else {
+    progressBar.classList.remove('progress-loss');
+    progressBar.classList.add('progress-gains');
+  }
 }
 
 async function fetchUserDetails() {

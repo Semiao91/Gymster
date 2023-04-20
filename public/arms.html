@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arms</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    
+    <div class="project">
+        <div id="alert" class="alert">
+            <span id="alert-message"></span>
+          </div>
+        <div class="sidebar">
+            <div id="logo">
+                <img class="logo" src="./assets/logo.png" alt="logo">
+                <div class="logo-title">Gymster</div>
+            </div>
+            <div class="sidebar-links">
+                <a href="/" id="dashboard-link">Dashboard</a>
+                <a href="/arms" id="arms-link">Arms</a>
+                <a href="/legs" id="legs-link">Legs</a>
+                <a href="/shoulders" id="shoulders-link">Shoulders</a>
+                <a href="/back" id="back-link">Back</a>
+                <a href="/chest" id="chest-link">Chest</a>
+                <a href="#" id="logout-btn">Log Out</a>
+            </div>
+        </div>
+
+        <div class="dashboard" id="dashboard-section">
+            <div class="dashboard-header">
+                <div class="dashboard-title">Arms</div>
+                <div id="dashboard-date"></div>
+            </div>
+            <div class="message">
+                <div class="message-text">
+                    <div class="message-title" >Lets add a new exercise</div>
+                    <button id="add-exercise-btn" type="submit">Add +</button>
+                </div>
+                <div class="message-img">
+                    <img src="./assets/work.png" alt="img">
+                </div>
+            </div>
+            <div class="activity a-hidden">
+                <div class="activity-calendar">
+                    <div class="wrapper">
+                        <header>
+                            <p class="current-date"></p>
+                            <div class="icons">
+                                <span id="prev"
+                                    class="material-symbols-rounded">-</span>
+                                <span id="next"
+                                    class="material-symbols-rounded">+</span>
+                            </div>
+                        </header>
+                        <div class="calendar">
+                            <ul class="weeks">
+                                <li>Sun</li>
+                                <li>Mon</li>
+                                <li>Tue</li>
+                                <li>Wed</li>
+                                <li>Thu</li>
+                                <li>Fri</li>
+                                <li>Sat</li>
+                            </ul>
+                            <ul class="days"></ul>
+                        </div>
+                    </div>
+                    <div class="activity-tracker">
+                        <div class="tracker-input">
+                          <div id="tracker-title">Select the date</div>
+                          <div class="tracker-input-box">
+                            <select id="exercise-input">
+                                <option value="">Select an exercise</option>
+                                <option value="chest">chest</option>
+                                <option value="back">back</option>
+                                <option value="legs">legs</option>
+                                <option value="sholders">sholders</option>
+                                <option value="arms">arms</option>
+                              </select>
+                            </div>
+                            <button id="submit-btn" class="hidden" type="submit">Submit</button>
+                           
+                          </div>
+                        <div class="tracker-display">
+                            <div class="tracker-display-title">What you did?</div>
+                            <div id="tracker-display-content" class="tracker-display-content"></div>
+                            <button id="delete-btn" class="delete-btn hidden">Delete Entry</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="exercise-modal" class="modal">
+                <div class="modal-content">
+                  <h2>Enter Exercise Details</h2>
+                  <label for="exercise-name">Exercise Name:</label>
+                  <input type="text" id="exercise-name" name="exercise-name" />
+                  <label for="exercise-weight">Weight (kg):</label>
+                  <input type="text" id="exercise-weight" name="exercise-weight" />
+                  <label for="exercise-reps">Repetitions:</label>
+                  <input type="text" id="exercise-reps" name="exercise-reps" />
+              
+                  <fieldset>
+                    <legend>Exercise Type:</legend>
+                    <input type="radio" id="chest" name="exercise-type" value="chest" />
+                    <label for="chest">Chest</label>
+                    <input type="radio" id="arms" name="exercise-type" value="arms" />
+                    <label for="arms">Arms</label>
+                    <input type="radio" id="legs" name="exercise-type" value="legs" />
+                    <label for="legs">Legs</label>
+                    <input type="radio" id="shoulders" name="exercise-type" value="shoulders" />
+                    <label for="shoulders">Shoulders</label>
+                    <input type="radio" id="back" name="exercise-type" value="back" />
+                    <label for="back">Back</label>
+                  </fieldset>
+              
+                  <div class="modal-buttons">
+                    <button id="save-exercise">Save</button>
+                    <button id="close-exercise-modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            <div class="exercise-list">
+
+            </div>
+            <div class="colors">
+                <div class="red" draggable="true"></div>
+                <div class="blue" draggable="true"></div>
+                <div class="yellow" draggable="true"></div>
+                <div class="green" draggable="true"></div>
+                <div class="purple" draggable="true"></div>
+            </div>
+        </div>
+
+        <div class="profile">
+            <div class="profile-top">
+                <div class="profile-header">
+                    <div class="">
+                        <img class="profile-avatar" src="./assets/avatar.svg"
+                            alt="avatar">
+                    </div>
+                    <div class="profile-name" id="profile-name"></div>
+                    <div class="profile-title">Noob</div>
+                </div>
+                <div class="edit">
+                    <button id="edit-profile" class="edit-button">&#9998; Edit</button>
+
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-height" ></div>
+                    <div class="profile-weight" ></div>
+                    <div class="profile-age" ></div>
+                </div>
+                <div class="profile-stats-attributes">
+                    <div class="profile-height">Height</div>
+                    <div class="profile-weight">Weight</div>
+                    <div class="profile-age">Age</div>
+                </div>
+                <div id="edit-modal" class="modal">
+                    <div class="modal-content">
+                      <h2>Edit Profile</h2>
+                      <label for="height">Height (m):</label>
+                      <input type="text" id="height" name="height" />
+                      <label for="weight">Weight (kg):</label>
+                      <input type="text" id="weight" name="weight" />
+                      <label for="age">Age (y):</label>
+                      <input type="text" id="age" name="age" />
+                      <div class="modal-buttons">
+                        <button id="save-changes">Save</button>
+                        <button id="close-modal">Cancel</button>
+                      </div>
+                    </div>
+                
+            </div> 
+            <div class="profile-goals">
+                <div class="profile-name">Your monthly goals</div>
+                <div class="goals">
+                    <div class="progress-stats">
+                        <div class="profile-gains" id="weight-difference">Gains</div>
+                        <div class="profile-gains" id="profile-gains">0kg</div>
+                    </div>
+                    <div class="progress-bar-gains">
+                        <div class="progress-gains" style="width: 70%;"></div>
+                      </div>
+                      <div class="progress-stats">
+                        <div class="profile-t">Monthly GYM visits</div>
+                        <div class="profile-trips profile-favourite"></div>
+                      </div>
+                    
+                    <div class="progress-bar visit">
+                        <div class="progress" style="width: 70%;"></div>
+                      </div>
+                      <div class="progress-stats">
+                        <div class="profile-favorite">Favourite muscle</div>
+                        <div class="profile-favourite" id="profile-favourite">None</div>
+                      </div>  
+                      
+                </div> 
+            </div>
+        </div>
+
+    </div>
+    <script src="arms.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

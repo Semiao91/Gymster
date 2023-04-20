@@ -441,6 +441,27 @@ button[type="submit"]:hover {
   transition: width 0.5s ease-in-out;
 }
 
+.progress-bar-gains {
+  width: 100%;
+  height: 20px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+.progress-gains {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-loss {
+  height: 100%;
+  background-color: #f44336; /* Red color */
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
 .goals{
   display: flex;
   flex-direction: column;
@@ -541,3 +562,40 @@ button[type="submit"]:hover {
   top: 0;
   opacity: 1; /* Make it fully visible when the alert is shown */
 }
+
+.exercise-list {
+  width: 1000px;
+  height: 500px;
+  align-items: flex-start;
+  display: flex;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: #89d4af;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+thead {
+  background-color: #4CAF50;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.a-hidden{
+  display: none;
+}
+

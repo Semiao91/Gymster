@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const Exercise = require('./models/exercise');
 const User = require('./models/user');
 const Goal = require('./models/goals');
+const List = require('./models/list');
 const session = require('express-session');
 
 const connectionString = 'mongodb+srv://berna19911:917242335@gymster.rmw6fzr.mongodb.net/?retryWrites=true&w=majority';
@@ -51,6 +52,25 @@ app.get('/', requireLogin, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.get('/arms', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/arms.html'));
+});
+
+app.get('/legs', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/legs.html'));
+});
+
+app.get('/chest', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/chest.html'));
+});
+
+app.get('/back', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/back.html'));
+});
+
+app.get('/shoulders', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/shoulders.html'));
+});
 
 app.post('/api/submit-exercise', requireLogin, async (req, res) => {
   const { date, exercise } = req.body;
@@ -175,6 +195,40 @@ app.get('/api/check-login', (req, res) => {
     }
   });
 
+  app.get('/api/get-exercises', async (req, res) => {
+    const exerciseType = req.query.type;
+
+    console.log(`Fetching exercises of type: ${exerciseType}`); 
+  
+    try {
+      const exercises = await List.find({ type: exerciseType });
+      res.status(200).json(exercises);
+      console.log(`Fetched exercises: ${JSON.stringify(exercises)}`); 
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Failed to fetch exercises' });
+    }
+  });
+
+  app.post('/api/submit-list-exercise', requireLogin, async (req, res) => {
+    const { name, weight, reps, type } = req.body;
+  
+    const listExercise = new List({
+      userId: req.session.userId,
+      name,
+      weight,
+      reps,
+      type,
+    });
+  
+    try {
+      const savedListExercise = await listExercise.save();
+      res.status(200).json({ message: 'Arms exercise submitted successfully.', exercise: savedListExercise });
+    } catch (error) {
+      res.status(500).json({ message: 'Error submitting arms exercise.', error });
+    }
+  });
+
   app.get('/api/most-submitted-muscle-group', requireLogin, async (req, res) => {
     const userId = req.session.userId;
     console.log("User ID:", userId); // Add this li
@@ -231,10 +285,9 @@ app.get('/api/check-login', (req, res) => {
     }
   });
 
+  // DO NOT TOUCH THIS
   app.delete('/api/delete-exercise', async (req, res) => {
     const date = req.body.date;
-
-  
     try {
       await Exercise.deleteOne({ date: new Date(date), userId: req.session.userId });
       res.status(200).json({ message: 'Exercise deleted successfully.' });
@@ -243,7 +296,20 @@ app.get('/api/check-login', (req, res) => {
       res.status(500).json({ message: 'Error deleting exercise.' });
     }
   });
+    // DO NOT TOUCH THIS
 
+    app.delete('/api/delete-list-item/:id', async (req, res) => {
+      const exerciseId = req.params.id;
+    
+      try {
+        await List.deleteOne({ _id: exerciseId, userId: req.session.userId });
+        res.status(200).json({ message: 'Exercise deleted successfully.' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting exercise.' });
+      }
+    });
+    
   app.get('/api/get-user-weight', requireLogin, async (req, res) => {
     const user = await User.findById(req.session.userId);
     res.json({ weight: user.weight });
@@ -261,11 +327,22 @@ app.get('/api/check-login', (req, res) => {
   app.post('/api/save-goal', requireLogin, async (req, res) => {
     try {
       const { weightDifference } = req.body;
-      const goal = new Goal({
-        userId: req.session.userId,
-        weightDifference,
-      });
   
+      // Check if there's an existing Goal document for the current user
+      let goal = await Goal.findOne({ userId: req.session.userId });
+  
+      if (goal) {
+        // If a Goal document exists, update the weightDifference
+        goal.weightDifference = weightDifference;
+      } else {
+        // If no Goal document exists, create a new one
+        goal = new Goal({
+          userId: req.session.userId,
+          weightDifference,
+        });
+      }
+  
+      // Save the Goal document
       await goal.save();
       res.json({ message: 'Goal saved successfully' });
     } catch (error) {
