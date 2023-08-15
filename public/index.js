@@ -17,13 +17,13 @@ const dateTitle = document.getElementById("tracker-title");
 const deleteBtn = document.getElementById("delete-btn");
 const lookingGood = document.getElementById("message-tip");
 datetimeDiv.textContent = dateTimeString;
-/////Handles select inputs for 5 exercises
+
 
 const exerciseInput = document.getElementById("exercise-input");
 const submitBtn = document.getElementById("submit-btn");
 const trackerDisplayContent = document.getElementById("tracker-display-content");
 
-//// Handles the submit for the specified exercise
+
 submitBtn.addEventListener("click", () => {
   const selectedExercise = exerciseInput.options[exerciseInput.selectedIndex].value;
   const selectedDateElement = document.querySelector(".selected");
@@ -47,7 +47,6 @@ let currMonth = date.getMonth();
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-/// rendar calendar
 const renderCalendar = async () => {
   const exercises = await fetchExercises(currMonth, currYear);
   const exerciseDates = exercises ? exercises.map((exercise) => new Date(exercise.date).getDate()) : [];
@@ -57,7 +56,7 @@ const renderCalendar = async () => {
   let lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
   let liTag = "";
   
-  // Initialize checkmarkedDays variable
+  
   let checkmarkedDays = 0;
 
   for (let i = firstDayofMonth; i > 0; i--) {
@@ -69,7 +68,7 @@ const renderCalendar = async () => {
     let hasExercise = exerciseDates.includes(i) ? "exercise-stored" : "";
     liTag += `<li class="${isToday} ${hasExercise}" onclick="selectDate(this)">${i}</li>`;
 
-    // Increment checkmarkedDays if a checkmark is found
+   
     if (hasExercise) {
       checkmarkedDays++;
     }
@@ -82,7 +81,7 @@ const renderCalendar = async () => {
   currentDate.innerText = `${months[currMonth]} ${currYear}`;
   daysTag.innerHTML = liTag;
 
-  // Update the profileTripsDiv element
+
   profileTripsDiv.textContent = checkmarkedDays;
 
   const progressPercentage = (checkmarkedDays / lastDateofMonth) * 100;
@@ -110,7 +109,7 @@ prevNextIcon.forEach(icon => {
 
 
 
-// Allows for day selection
+
 async function selectDate(element) {
   const selected = document.querySelector(".selected");
   if (selected) {
@@ -119,24 +118,23 @@ async function selectDate(element) {
   dateTitle.textContent = `You selected ${element.textContent} of ${months[currMonth]}`;
   element.classList.add("selected");
 
-  // Fetch exercise for the selected date
+ 
   const selectedDate = parseInt(element.textContent);
   const selectedDateString = new Date(currYear, currMonth, selectedDate).toISOString();
   const exercise = await fetchExercise(selectedDateString);
 
-  // Update the tracker-display-content
+ 
   if (exercise) {
     trackerDisplayContent.textContent = `You did ${exercise.type} on this day`;
-    deleteBtn.classList.remove('hidden'); // Show delete button
-    submitBtn.classList.add('hidden'); // Hide submit button
+    deleteBtn.classList.remove('hidden'); 
+    submitBtn.classList.add('hidden'); 
   } else {
     trackerDisplayContent.textContent = '';
-    deleteBtn.classList.add('hidden'); // Hide delete button
-    submitBtn.classList.remove('hidden'); // Show submit button
+    deleteBtn.classList.add('hidden'); 
+    submitBtn.classList.remove('hidden'); 
   }
 }
 
-// Function that allows input storage
 async function submitExercise(date, exercise) {
   const response = await fetch('/api/submit-exercise', {
     method: 'POST',
@@ -219,7 +217,7 @@ async function fetchUserInfo() {
     if (response.status === 200) {
       const data = await response.json();
       console.log('User information:', data.user);
-      return data.user; // Return user data here
+      return data.user; 
     } else {
       console.log('Error fetching user information:', response.status);
     }
@@ -235,7 +233,7 @@ async function updateWelcomeMessage() {
     const welcomeMessageElement = document.getElementById('welcome-message');
     const profileName = document.getElementById('profile-name');
     profileName.textContent = `${userInfo.firstname} ${userInfo.lastname}`
-    welcomeMessageElement.textContent = `Hello ${userInfo.firstname}`; // Use userInfo.firstname
+    welcomeMessageElement.textContent = `Hello ${userInfo.firstname}`; 
   }
 }
 
@@ -252,7 +250,7 @@ deleteBtn.addEventListener("click", async () => {
     await renderCalendar();
     await updateMostSubmittedMuscleGroup();
     trackerDisplayContent.textContent = '';
-    deleteBtn.classList.add('hidden'); // Hide delete button
+    deleteBtn.classList.add('hidden'); 
   }
 });
 
@@ -286,7 +284,7 @@ async function logout() {
     });
 
     if (response.ok) {
-      // If the logout is successful, redirect the user to the login page
+   
       window.location.href = '/login';
     } else {
       console.error('Logout failed:', response.statusText);
@@ -306,7 +304,7 @@ async function checkLoginStatus() {
     });
 
     if (response.status === 401) {
-      // If the user is not logged in, redirect them to the login page
+  
       window.location.href = '/login';
     }
   } catch (error) {
@@ -321,18 +319,17 @@ checkLoginStatus();
   const saveChangesButton = document.getElementById("save-changes");
   const modal = document.getElementById("edit-modal");
 
-  // Open the modal
+  
   editProfileButton.onclick = () => {
     modal.style.display = "block";
   };
 
-  // Close the modal
+ 
   closeModalButton.onclick = () => {
     modal.style.display = "none";
   };
 
-  // Save changes and close the modal
- // Save changes and close the modal
+ 
 saveChangesButton.onclick = async () => {
   const height = document.getElementById("height").value;
   const weight = document.getElementById("weight").value;
@@ -395,23 +392,22 @@ async function saveWeightDifferenceGoal(weightDifference) {
 }
 
 function renderWeightDifference(weightDifference) {
-  // Create an element to display the weight difference
+ 
   const weightDifferenceElement = document.getElementById('profile-gains');
 
-  // Format the weight difference text
+
   const weightDifferenceText = weightDifference > 0 ? `+${weightDifference}kg` : `${weightDifference}kg`;
 
-  // Set the content of the weight difference element
+
   weightDifferenceElement.textContent = `${weightDifferenceText}`;
   updateProgressBar(weightDifference);
 }
 
 function updateProgressBar(weightDifference) {
-  // Calculate progress percentage based on weight difference
-  // You can adjust the calculation based on your desired range
+  
   const progressPercentage = Math.abs(weightDifference) * 10;
 
-  // Update the progress bar width and color based on weight difference
+
   const progressBar = document.querySelector('.progress-gains');
   progressBar.style.width = `${progressPercentage}%`;
 
@@ -498,32 +494,3 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchUserDetails();
 });
 
-/*
-const colors = document.querySelectorAll(".colors div");
-
-// Add draggable attribute to colors
-colors.forEach(color => {
-  color.setAttribute("draggable", "true");
-});
-
-// Add event listeners for dragstart on colors
-colors.forEach(color => {
-  color.addEventListener("dragstart", event => {
-    event.dataTransfer.setData("text/plain", event.target.className);
-  });
-});
-
-// Add event listeners for dragover on days
-daysTag.addEventListener("dragover", event => {
-  event.preventDefault();
-});
-
-// Add event listeners for drop on days
-daysTag.addEventListener("drop", event => {
-  event.preventDefault();
-  const color = event.dataTransfer.getData("text/plain");
-  if (color === "red" || color === "blue" || color === "yellow" || color === "green" || color === "purple") {
-    event.target.style.backgroundColor = color;
-  }
-});
-*/
