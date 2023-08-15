@@ -11,10 +11,10 @@ async function handleLogin(event) {
     });
 
     if (response.ok) {
-        // Redirect to the main page if login is successful
+
         window.location.replace('/');
     } else {
-        // Handle error if login failed
+       
         alert('Login failed. Please check your email and password.');
     }
 }
@@ -34,11 +34,11 @@ async function handleRegister(event) {
     });
 
     if (response.ok) {
-        // Redirect to the login page if registration is successful
+       
         alert('Registration successful. You can now log in.');
         window.location.replace('/login');
     } else {
-        // Handle error if registration failed
+  
         alert('Registration failed.');
     }
 }
