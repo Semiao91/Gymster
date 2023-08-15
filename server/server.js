@@ -31,7 +31,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 24 hours
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
 
@@ -40,7 +40,7 @@ app.get('/login', (req, res) => {
 });
 
 const requireLogin = (req, res, next) => {
-  console.log("Checking login:", req.session); // Add this line
+  console.log("Checking login:", req.session); 
   if (!req.session.userId) {
     return res.status(401).json({ message: 'You must be logged in to access this resource.' });
   }
@@ -78,9 +78,9 @@ app.post('/api/submit-exercise', requireLogin, async (req, res) => {
   const { date, exercise } = req.body;
   const userId = req.session.userId;
   
-    // Save the exercise information to MongoDB
+   
     const newExercise = new Exercise({
-      userId: req.session.userId, // Add the userId from the session
+      userId: req.session.userId, 
       type: exercise,
       date: new Date(date),
     });
@@ -98,7 +98,7 @@ app.post('/api/submit-exercise', requireLogin, async (req, res) => {
 
     const { firstname, lastname, email, password } = req.body;
 
-    // Check if the user already exists
+
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -110,7 +110,7 @@ app.post('/api/submit-exercise', requireLogin, async (req, res) => {
         return res.status(500).json({ message: 'Error checking for existing user.', error });
     }
 
-    // Create a new user
+
     const newUser = new User({ firstname, lastname, email, password });
 
     try {
@@ -140,8 +140,8 @@ app.post('/api/login', async (req, res) => {
       }
 
       req.session.userId = user._id;
-      console.log('User logged in:', req.session); // Add this line
-
+      console.log('User logged in:', req.session); 
+    
       res.status(200).json({ message: 'User logged in successfully.' });
   } catch (error) {
       res.status(500).json({ message: 'Error logging in user.', error });
@@ -233,13 +233,13 @@ app.get('/api/check-login', (req, res) => {
 
   app.get('/api/most-submitted-muscle-group', requireLogin, async (req, res) => {
     const userId = req.session.userId;
-    console.log("User ID:", userId); // Add this li
+    console.log("User ID:", userId); 
   
     try {
       const mostSubmittedMuscleGroup = await getMostSubmittedMuscleGroup(userId);
       res.status(200).json({ muscleGroup: mostSubmittedMuscleGroup });
     } catch (error) {
-      console.error("Error in /api/most-submitted-muscle-group:", error); // Add this line
+      console.error("Error in /api/most-submitted-muscle-group:", error); 
       res.status(500).json({ message: 'Error fetching most submitted muscle group.', error });
     }
   });
@@ -287,7 +287,7 @@ app.get('/api/check-login', (req, res) => {
     }
   });
 
-  // DO NOT TOUCH THIS
+
   app.delete('/api/delete-exercise', async (req, res) => {
     const date = req.body.date;
     try {
@@ -298,7 +298,7 @@ app.get('/api/check-login', (req, res) => {
       res.status(500).json({ message: 'Error deleting exercise.' });
     }
   });
-    // DO NOT TOUCH THIS
+
 
     app.delete('/api/delete-list-item/:id', async (req, res) => {
       const exerciseId = req.params.id;
@@ -330,21 +330,21 @@ app.get('/api/check-login', (req, res) => {
     try {
       const { weightDifference } = req.body;
   
-      // Check if there's an existing Goal document for the current user
+   
       let goal = await Goal.findOne({ userId: req.session.userId });
   
       if (goal) {
-        // If a Goal document exists, update the weightDifference
+   
         goal.weightDifference = weightDifference;
       } else {
-        // If no Goal document exists, create a new one
+    
         goal = new Goal({
           userId: req.session.userId,
           weightDifference,
         });
       }
   
-      // Save the Goal document
+    
       await goal.save();
       res.json({ message: 'Goal saved successfully' });
     } catch (error) {
@@ -361,19 +361,19 @@ app.get('/api/check-login', (req, res) => {
         return res.status(500).json({ message: 'Error logging out user.' });
       }
 
-      console.log('After session destroy:', req.session); // Add this line
+      console.log('After session destroy:', req.session);
   
-      // Clear browser cache
+     
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
   
-      // After destroying the session, redirect the user to the login page
+  
       res.redirect('/login');
     });
   });
 
-//Set the folder where all the static files are located so they can be rendered
+
 
   
 app.listen(port, () => {
